@@ -6,10 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="wms" />
         <module name="zframe-ssi" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="wms" target="1.7" />
       <module name="zframe-ssi" target="1.7" />
     </bytecodeTargetLevel>
   </component>

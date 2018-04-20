@@ -34,6 +34,8 @@
     <orderEntry type="library" name="commons-lang-2.5" level="project" />
     <orderEntry type="library" name="commons-beanutils-1.8.3" level="project" />
     <orderEntry type="library" name="commons-lang" level="project" />
+    <orderEntry type="library" name="json" level="project" />
+    <orderEntry type="library" name="core-3.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:4.1.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:4.1.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:4.1.1.RELEASE" level="project" />
@@ -99,9 +101,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.4.0" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.4.0" level="project" />
-    <orderEntry type="library" name="json" level="project" />
-    <orderEntry type="library" name="core-3.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.flywaydb:flyway-core:5.0.3" level="project" />
   </component>
 </module>
