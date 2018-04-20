@@ -3,7 +3,7 @@
 <%@ taglib uri="http://zlzkj.com/tags" prefix="z" %>
 <html>
 <head>
-    <title>鼎研WMS仓储管理系统登录</title>
+    <title>鼎研WMS智能仓储管理系统</title>
     <link href="${__static__}/css/skin/font-awesome.css" rel="stylesheet">
     <link href="${__static__}/css/bootstrap.min.css" rel="stylesheet">
     <link href="${__static__}/css/templatemo-style.css" rel="stylesheet">
@@ -39,7 +39,7 @@
 <body class="light-gray-bg">
 <div class="templatemo-login-widget white-bg">
     <header class="text-center">
-        <h1><img src="${__static__}/images/skin/small_logo.png" width="30" height="30" style="margin-top: -5px">&nbsp;鼎研WMS仓储管理系统登录</h1>
+        <h1><img src="${__static__}/images/skin/small_logo.png" width="30" height="30" style="margin-top: -5px">&nbsp;鼎研WMS智能仓储管理系统</h1>
     </header>
     <c:if test="${errors != null}">
         <div class="alert-danger login-error-div">

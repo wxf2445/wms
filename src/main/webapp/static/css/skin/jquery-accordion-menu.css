@@ -20,8 +20,9 @@
 	padding-left: 22px;
 	float: left;
 	line-height: 50px;
-	font-weight: 600;
-	color: #f0f0f0;
+	/*font-weight: 600;*/
+	color: #FFFFFF;
+	align-content: center;
 	background: #414956
 }
 

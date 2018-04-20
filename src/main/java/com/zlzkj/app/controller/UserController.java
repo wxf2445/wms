@@ -56,17 +56,27 @@ public class UserController extends BaseController {
         return "user/index";
     }
 
-    @RequestMapping(value = {"/create"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/create"})
     public String create(Model model, HttpServletRequest request, HttpServletResponse response, User user) {
         return ajaxReturn(response, userService.save(user));
     }
 
-    @RequestMapping(value = {"/update"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/update"})
     public String edit(Model model, HttpServletRequest request, HttpServletResponse response, User user) {
         return ajaxReturn(response, userService.update(user));
     }
 
+    @RequestMapping(value = {"/enable"})
+    public String enable(Model model, HttpServletRequest request, HttpServletResponse response, String id) {
+        return ajaxReturn(response, userService.enable(id));
+    }
 
+    @RequestMapping(value = {"/disable"})
+    public String disable(Model model, HttpServletRequest request, HttpServletResponse response, String id) {
+        return ajaxReturn(response, userService.disable(id));
+    }
+
+    //测试权限
     @RequiresRoles("SUPER_ADMIN")
     @ResponseBody
     @RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
@@ -76,7 +86,7 @@ public class UserController extends BaseController {
 
     //json 用户列表
     @ResponseBody
-    @RequestMapping(value = {"/list"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/list"})
     public Map<String, Object> userList(HttpServletRequest request, Integer nowPage) {
         Map<String, Object> result = new HashMap();
         Map map = MapUtil.convert(request.getParameterMap());
@@ -85,7 +95,7 @@ public class UserController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/to_create"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/to_create"})
     public Map<String, Object> toCreate(HttpServletRequest request) {
         Map<String, Object> result = new HashMap();
         result.put("roles", roleService.findByMap(new HashMap<String, Object>()));
@@ -93,7 +103,7 @@ public class UserController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/to_edit"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/to_edit"})
     public Map<String, Object> toEdit(HttpServletRequest request, String id) {
         Map<String, Object> result = new HashMap();
         result.put("roles", roleService.findByMap(new HashMap<String, Object>()));

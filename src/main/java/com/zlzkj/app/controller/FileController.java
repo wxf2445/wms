@@ -33,10 +33,12 @@ public class FileController extends BaseController {
     @Value("${FILE_REPOSITORY}")
     private String FILE_REPOSITORY;
 
+    /*
+    * filepath 为服务器上的文件的绝对路径的后面部分
+     */
     @ResponseBody
 	@RequestMapping(value={"openfile"})
 	public void getFile(Model model, HttpServletRequest request, HttpServletResponse response, String filepath) {
-		response.setHeader("Access-Control-Allow-Origin", "*");
 
 	    File file = new File(FILE_REPOSITORY + filepath);
         //System.out.println(FILE_REPOSITORY + filepath);
@@ -76,25 +78,25 @@ public class FileController extends BaseController {
         try {
 
             filepath = URLDecoder.decode(filepath, "utf-8");
-            //filepath = new String(filepath.getBytes("iso-8859-1"), "utf-8");
+
             File file = new File(FILE_REPOSITORY + filepath);
             HttpHeaders headers = new HttpHeaders();
-            //String fileName=new String("你好.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题
-            //filepath = new String( filepath.substring(filepath.lastIndexOf("/") + 1).getBytes("utf-8"),"iso-8859-1");
 
-            filepath = filepath.substring(filepath.lastIndexOf("/") + 1);
+            //String fileName=new String("你好.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题
+
+            String fileName = filepath.substring(filepath.lastIndexOf("/") + 1);
 
             //解决文件中文乱码
             String agent = request.getHeader("USER-AGENT");
 
             if (null != agent && -1 != agent.indexOf("MSIE") || null != agent && -1 != agent.indexOf("Trident")){
-                filepath = URLEncoder.encode(filepath, "UTF-8");//IE浏览器
+                fileName = URLEncoder.encode(fileName, "UTF-8");//IE浏览器
             }else{
-                filepath = new String(filepath.getBytes("UTF-8"), "ISO8859-1");
+                fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
             }
 
 
-            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filepath + "\"");
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"");
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
             return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
                     headers, HttpStatus.OK);

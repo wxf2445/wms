@@ -70,9 +70,10 @@
                                         <td>
                                             <a class="fancybox" data-fancybox-group="button"
                                                href="${z:u('file/openfile')}?filepath=${v.avatar==null?'default/default.jpg':v.avatar}">
-                                                <img width="30" height="30" src="${z:u('file/openfile')}?filepath=${v.avatar==null?'default/default.jpg':v.avatar}"
+                                                <img width="30" height="30"
+                                                     src="${z:u('file/openfile')}?filepath=${v.avatar==null?'default/default.jpg':v.avatar}"
                                                      onerror="this.src='${__static__}/images/default/default.jpg';
-                                                     this.parentNode.href='${__static__}/images/default/default.jpg'"/>
+                                                             this.parentNode.href='${__static__}/images/default/default.jpg'"/>
                                             </a>
                                         </td>
                                         <td>${v.name}</td>
@@ -90,6 +91,14 @@
                                         </td>
                                         <td>
                                             <input type="button" class="btn btn-default btn-sm editUser" value="编辑">
+                                            <c:if test="${v.is_locked == 0}">
+                                                <input type="button" class="btn btn-default btn-sm disableUser"
+                                                       value="禁用">
+                                            </c:if>
+                                            <c:if test="${v.is_locked == 1}">
+                                                <input type="button" class="btn btn-default btn-sm enableUser"
+                                                       value="启用">
+                                            </c:if>
                                             <input type="button" class="btn btn-default btn-sm deleteUser" value="删除">
                                         </td>
                                     </tr>
@@ -103,48 +112,50 @@
                             </table>
                         </form>
 
-                        <c:set var="page" value="${pageView.getPage() }"></c:set>
-                        <div id="page-view">
-                            <nav class="zlzkj_pagination">
-                                <ul class="pagination">
-                                    <c:choose>
-                                        <c:when test="${page.currentPage() == page.firstPage()}">
-                                            <li class="disabled"><a href="javascript:void(0);"><span>上一页</span></a></li>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li>
-                                                <a href="javascript:refreshTable('${page.previousPage()}')"><span>上一页</span></a>
-                                            </li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <c:forEach var="p" items="${pageView.showPages()}" varStatus="s">
+                        <c:if test="${pageView.page.totalPage>1}">
+                            <c:set var="page" value="${pageView.getPage() }"></c:set>
+                            <div id="page-view">
+                                <nav class="zlzkj_pagination">
+                                    <ul class="pagination">
                                         <c:choose>
-                                            <c:when test="${p == page.currentPage()}">
-                                                <li class="active"><a href="javascript:void(0);">${p}</a></li>
-                                            </c:when>
-                                            <c:when test="${p == 0}">
-                                                <li><a>...</a></li>
+                                            <c:when test="${page.currentPage() == page.firstPage()}">
+                                                <li class="disabled"><a href="javascript:void(0);"><span>上一页</span></a></li>
                                             </c:when>
                                             <c:otherwise>
                                                 <li>
-                                                    <a href="javascript:refreshTable('${p}')"><span>${p}</span></a>
+                                                    <a href="javascript:refreshTable('${page.previousPage()}')"><span>上一页</span></a>
                                                 </li>
                                             </c:otherwise>
                                         </c:choose>
-                                    </c:forEach>
-                                    <c:choose>
-                                        <c:when test="${page.currentPage() == page.lastPage()}">
-                                            <li class="disabled"><a href="javascript:void(0);"><span>下一页</span></a></li>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <li>
-                                                <a href="javascript:refreshTable('${page.nextPage()}')"><span>下一页</span></a>
-                                            </li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </ul>
-                            </nav>
-                        </div>
+                                        <c:forEach var="p" items="${pageView.showPages()}" varStatus="s">
+                                            <c:choose>
+                                                <c:when test="${p == page.currentPage()}">
+                                                    <li class="active"><a href="javascript:void(0);">${p}</a></li>
+                                                </c:when>
+                                                <c:when test="${p == 0}">
+                                                    <li><a>...</a></li>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <li>
+                                                        <a href="javascript:refreshTable('${p}')"><span>${p}</span></a>
+                                                    </li>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
+                                        <c:choose>
+                                            <c:when test="${page.currentPage() == page.lastPage()}">
+                                                <li class="disabled"><a href="javascript:void(0);"><span>下一页</span></a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li>
+                                                    <a href="javascript:refreshTable('${page.nextPage()}')"><span>下一页</span></a>
+                                                </li>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -220,28 +231,17 @@
 
     function initOperation() {
         $(".createUser").off("click").on("click", function () {
-            $.ajax({
-                type: "POST",
-                url: "${z:u('user/toCreate')}",
-                data: {},
-                success: function (result) {
-                    var obj = {id: 0, email: '', phone: '', address: '', description: ''};
-                    //console.log(obj)
-                    $("#commonModal .modal-content").html($("#userTemplate").tmpl({obj: obj, roles: result.roles}));
-                    userFormValidate();
-                }
+            $.post("${z:u('user/toCreate')}", {}, function (result, textStatus, xhr) {
+                var obj = {id: 0, email: '', phone: '', address: '', description: ''};
+                $("#commonModal .modal-content").html($("#userTemplate").tmpl({obj: obj, roles: result.roles}));
+                userFormValidate();
             });
         });
 
         $(".editUser").off("click").on("click", function () {
-            $.ajax({
-                type: "POST",
-                url: "${z:u('user/toEdit')}",
-                data: {id: $(this).closest("tr").data("id")},
-                success: function (result) {
-                    $("#commonModal .modal-content").html($("#userTemplate").tmpl(result));
-                    userFormValidate();
-                }
+            $.post("${z:u('user/toEdit')}", {id: $(this).closest("tr").data("id")}, function (result, textStatus, xhr) {
+                $("#commonModal .modal-content").html($("#userTemplate").tmpl(result));
+                userFormValidate();
             });
         });
 
@@ -258,25 +258,71 @@
                             $.post("${z:u('user/delete')}", {id: id}, function (data, textStatus, xhr) {
                                 if (data > 0) {
                                     refreshTable(0);
-                                    noty({
-                                        dismissQueue: true,
-                                        force: true,
-                                        timeout: 1000,
-                                        layout: 'topCenter',
-                                        theme: 'default',
-                                        text: '删除成功',
-                                        type: 'success'
-                                    });
+                                    noty_success('删除成功');
                                 } else {
-                                    noty({
-                                        dismissQueue: true,
-                                        force: true,
-                                        timeout: 1000,
-                                        layout: 'topCenter',
-                                        theme: 'default',
-                                        text: '删除失败',
-                                        type: 'error'
-                                    });
+                                    noty_fail('删除失败');
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'btn-primary',
+                        action: function () {
+                            // button action.
+                        }
+                    },
+                }
+            });
+        });
+
+        $(".disableUser").off("click").on("click", function () {
+            var id = $(this).closest("tr").data("id");
+            $.confirm({
+                title: '系统提示',
+                content: "确认要禁用'<font color='#f00'>" + $(this).closest("tr").data("name") + "</font>'吗？",
+                buttons: {
+                    ok: {
+                        text: '确认',
+                        btnClass: 'btn-primary',
+                        action: function () {
+                            $.post("${z:u('user/disable')}", {id: id}, function (data, textStatus, xhr) {
+                                if (data > 0) {
+                                    refreshTable(0);
+                                    noty_success('禁用成功');
+                                } else {
+                                    noty_fail('操作失败');
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        btnClass: 'btn-primary',
+                        action: function () {
+                            // button action.
+                        }
+                    },
+                }
+            });
+        });
+
+        $(".enableUser").off("click").on("click", function () {
+            var id = $(this).closest("tr").data("id");
+            $.confirm({
+                title: '系统提示',
+                content: "确认要启用'<font color='#f00'>" + $(this).closest("tr").data("name") + "</font>'吗？",
+                buttons: {
+                    ok: {
+                        text: '确认',
+                        btnClass: 'btn-primary',
+                        action: function () {
+                            $.post("${z:u('user/enable')}", {id: id}, function (data, textStatus, xhr) {
+                                if (data > 0) {
+                                    refreshTable(0);
+                                    noty_success('启用成功');
+                                } else {
+                                    noty_fail('操作失败');
                                 }
                             });
                         }
@@ -310,25 +356,9 @@
                             $.post("${z:u('user/delete')}", $(".ids-form").serialize(), function (data, textStatus, xhr) {
                                 if (data > 0) {
                                     refreshTable(0);
-                                    noty({
-                                        dismissQueue: true,
-                                        force: true,
-                                        timeout: 1000,
-                                        layout: 'topCenter',
-                                        theme: 'default',
-                                        text: '删除成功',
-                                        type: 'success'
-                                    });
+                                    noty_success('删除成功');
                                 } else {
-                                    noty({
-                                        dismissQueue: true,
-                                        force: true,
-                                        timeout: 1000,
-                                        layout: 'topCenter',
-                                        theme: 'default',
-                                        text: '删除失败',
-                                        type: 'error'
-                                    });
+                                    noty_fail('删除失败');
                                 }
                             });
                         }
@@ -559,7 +589,8 @@
                 <td>
                     <a class="fancybox" data-fancybox-group="button"
                        href="${z:u('file/openfile')}?filepath={%= v.avatar==null?'default/default.jpg':''%}">
-                        <img width="30" height="30" src="${z:u('file/openfile')}?filepath={%= v.avatar==null?'default/default.jpg':''%}"
+                        <img width="30" height="30"
+                             src="${z:u('file/openfile')}?filepath={%= v.avatar==null?'default/default.jpg':''%}"
                              onerror="this.src='${__static__}/images/default/default.jpg';this.parentNode.href='${__static__}/images/default/default.jpg'"/>
                     </a>
                 </td>
@@ -571,11 +602,18 @@
                     {%if v.is_locked == 0%}
                     <span class="tag-success">启用</span>
                     {%elseif v.is_locked == 1%}
-                    <span class="tag-warning">禁用</span>
+                    <span class="tag-danger">禁用</span>
                     {%/if%}
                 </td>
                 <td>
                     <input type="button" class="btn btn-default btn-sm editUser" value="编辑">
+                    {%if v.is_locked == 0%}
+                        <input type="button" class="btn btn-default btn-sm disableUser"
+                               value="禁用">
+                    {%elseif v.is_locked == 1%}
+                        <input type="button" class="btn btn-default btn-sm enableUser"
+                               value="启用">
+                    {%/if%}
                     <input type="button" class="btn btn-default btn-sm deleteUser" value="删除">
                 </td>
             </tr>

@@ -10,7 +10,8 @@ public class MapUtil {
         Set keys = map.keySet();
         for(Object key: keys.toArray()){
             String[] value = (String[])map.get(key);
-            result.put(key,value.length==1?value[0]:value);
+            if(value.length>0&&!value[0].equals(""))
+                result.put(key,value.length==1?value[0]:value);
         }
         return result;
     }

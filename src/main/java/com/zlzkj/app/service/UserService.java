@@ -45,6 +45,18 @@ public class UserService {
 	public Integer update(User entity){
 		return mapper.updateByPrimaryKey(entity);
 	}
+	public Integer enable(String id){
+		User entity = new User();
+		entity.setId(id);
+		entity.setLocked(false);
+		return mapper.updateByPrimaryKey(entity);
+	}
+	public Integer disable(String id){
+		User entity = new User();
+		entity.setId(id);
+		entity.setLocked(true);
+		return mapper.updateByPrimaryKey(entity);
+	}
 	
 	public Integer save(User entity) {
 		entity.setId(IDGenerator.generator());

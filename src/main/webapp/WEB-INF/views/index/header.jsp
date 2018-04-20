@@ -38,7 +38,6 @@
         </div>
         <div style="clear:both; float:none; height:0; overflow:hidden"></div>
     </div>
-    <div class="title_date"><fmt:formatDate value="${now}" pattern="yyyy年M月d日 E"/></div>
 </div>
 
 </body>

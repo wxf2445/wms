@@ -68,6 +68,28 @@
             preview.src = "";
         }
     })
+    function noty_success(str){
+        noty({
+            dismissQueue: true,
+            force: true,
+            timeout: 1000,
+            layout: 'topCenter',
+            theme: 'default',
+            text: str,
+            type: 'success'
+        });
+    }
+    function noty_fail(str){
+        noty({
+            dismissQueue: true,
+            force: true,
+            timeout: 1000,
+            layout: 'topCenter',
+            theme: 'default',
+            text: str,
+            type: 'error'
+        });
+    }
 </script>
 
 
