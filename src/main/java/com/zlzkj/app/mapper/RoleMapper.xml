@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zlzkj.app.mapper.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.zlzkj.app.model.Role" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id,name,code,description
+  </sql>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from x_role
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.zlzkj.app.model.Role" >
+   <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into x_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null">id,</if>
+      <if test="name != null">name,</if>
+      <if test="code != null">code,</if>
+      <if test="description != null">description,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null">#{id},</if>
+      <if test="name != null">#{name},</if>
+      <if test="code != null">#{code},</if>
+      <if test="description != null">#{description},</if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.zlzkj.app.model.Role" >
+    update x_role
+    <set >
+      <if test="name != null">name = #{name,jdbcType=VARCHAR},</if>
+      <if test="code != null">code = #{code,jdbcType=VARCHAR},</if>
+      <if test="description != null">description = #{description,jdbcType=VARCHAR},</if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from x_role
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from x_role
+  </select>
+
+  <select id="selectByMap"  resultType="com.zlzkj.core.sql.Row" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from x_role
+    <where>
+      <if test="roleId != null ">role_id = #{roleId}</if>
+    </where>
+  </select>
+
+  <select id="countByMap"  resultType="java.lang.Integer" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from x_role
+    <where>
+      <if test="roleId != null ">role_id = #{roleId}</if>
+    </where>
+  </select>
+</mapper>
